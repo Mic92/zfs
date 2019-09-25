@@ -60,15 +60,15 @@ clean: clean-@ac_system@
 modules_install-Linux:
 	@# Install the kernel modules
 	$(MAKE) -C @LINUX_OBJ@ M=`pwd` modules_install \
-		INSTALL_MOD_PATH=$(DESTDIR)$(INSTALL_MOD_PATH) \
+		INSTALL_MOD_PATH=@prefix@/$(INSTALL_MOD_PATH) \
 		INSTALL_MOD_DIR=$(INSTALL_MOD_DIR) \
 		KERNELRELEASE=@LINUX_VERSION@
 	@# Remove extraneous build products when packaging
-	kmoddir=$(DESTDIR)$(INSTALL_MOD_PATH)/lib/modules/@LINUX_VERSION@; \
-	if [ -n "$(DESTDIR)" ]; then \
+	kmoddir=@prefix@$(INSTALL_MOD_PATH)/lib/modules/@LINUX_VERSION@; \
+	if [ -n "@prefix@" ]; then \
 		find $$kmoddir -name 'modules.*' | xargs $(RM); \
 	fi
-	sysmap=$(DESTDIR)$(INSTALL_MOD_PATH)/boot/System.map-@LINUX_VERSION@; \
+	sysmap=@prefix@$(INSTALL_MOD_PATH)/boot/System.map-@LINUX_VERSION@; \
 	if [ -f $$sysmap ]; then \
 		depmod -ae -F $$sysmap @LINUX_VERSION@; \
 	fi
